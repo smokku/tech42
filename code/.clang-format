@@ -1,0 +1,19 @@
+---
+BasedOnStyle: Chromium
+UseTab: Never
+IndentWidth: 4
+ColumnLimit: 0
+
+---
+Language: Cpp
+DerivePointerAlignment: false
+PointerAlignment: Left
+SortIncludes: Never
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+Cpp11BracedListStyle: true
+# BracketAlignmentStyle: BlockIndent
+AlignArrayOfStructures: Left
+SpaceBeforeCtorInitializerColon: true
