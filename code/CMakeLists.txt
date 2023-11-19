@@ -1,3 +1,6 @@
+# Compute platform bits.
+math(EXPR PLATFORM_BITS "8*${CMAKE_SIZEOF_VOID_P}")
+
 fips_begin_lib(sokol)
     fips_files(sokol.c)
     if (FIPS_OSX)
@@ -22,9 +25,28 @@ fips_begin_lib(sokol)
 fips_end_lib()
 
 fips_begin_app(tech42 windowed)
+    if (PLATFORM_BITS EQUAL 64)
+        target_compile_definitions(tech42 PRIVATE ARCH_STRING="x86_64")
+    endif()
+    if (PLATFORM_BITS EQUAL 32)
+        target_compile_definitions(tech42 PRIVATE ARCH_STRING="x86")
+    endif()
+
+    if (NOT CMAKE_BUILD_TYPE EQUAL Release)
+        set_property(TARGET tech42 PROPERTY COMPILE_WARNING_AS_ERROR ON)
+    endif()
+
     fips_files(
-        main.c
+        sys/sys_main.c
     )
+    if(FIPS_WINDOWS)
+        fips_files(sys/sys_win32.c)
+    elseif(FIPS_OSX)
+        fips_files(sys/sys_osx.m)
+    else()
+        fips_files(sys/sys_unix.c)
+    endif()
+
     fips_deps(sokol)
     # sokol_shader(sokol_shaders.glsl ${slang})
     # fipsutil_copy(assets.yml)
